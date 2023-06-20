@@ -1,29 +1,45 @@
 package dev.shaankhan.learningspringboot.demo.student;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Date;
 
+@Entity
+@Table
 public class Student {
+    @Id
+    @SequenceGenerator(
+            name = "student_sequence",
+            sequenceName = "student_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "student_sequence"
+    )
     private long id;
     private String name;
+
+    @Transient //means it's calculated instead of hardcoded
     private int age;
+
     private LocalDate dateOfBirth;
     private String email;
 
     public Student() {
     }
 
-    public Student(long id, String name, int age, LocalDate dateOfBirth, String email) {
+    public Student(long id, String name, LocalDate dateOfBirth, String email) {
         this.id = id;
         this.name = name;
-        this.age = age;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
     }
 
-    public Student(String name, int age, LocalDate dateOfBirth, String email) {
+    public Student(String name, LocalDate dateOfBirth, String email) {
         this.name = name;
-        this.age = age;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
     }
@@ -45,7 +61,7 @@ public class Student {
     }
 
     public int getAge() {
-        return age;
+        return this.dateOfBirth.getYear() - LocalDate.now().getYear();
     }
 
     public void setAge(int age) {
